@@ -1,0 +1,879 @@
+================================================================================
+TEST SCENARIOS AND EXAMPLES FOR ALL 7 ALGORITHMS
+Cybersecurity Threat Detection & Response System
+================================================================================
+
+This file contains ready-to-use test scenarios and expected outputs for testing
+all 7 algorithms in the project. Each scenario includes:
+- Test parameters
+- What to expect
+- Real-world context
+- How to interpret results
+
+================================================================================
+SECTION 1: BFS (BREADTH-FIRST SEARCH) - "Level-by-Level Exploration"
+================================================================================
+
+TEST SCENARIO 1.1: Small Network Reachability
+----------------------------------------------
+DESCRIPTION: Determine how far a threat can spread from a source computer
+
+SETUP:
+  Network Size: 10 nodes
+  Topology: random
+  Algorithm: BFS
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Animation shows spreading layer by layer
+  - Step 1: Only node_0 visited
+  - Step 2-3: Direct neighbors of node_0 visited (typically 2-3 nodes)
+  - Step 4-7: Neighbors of neighbors visited
+  - All steps: More nodes added to frontier at each level
+  
+METRICS TO CHECK:
+  Total Steps: ~8-10 (depends on network connectivity)
+  Nodes Visited: 8-10 (most but not all nodes typically reachable)
+  Cost: Low (typically 0-5)
+  Pattern: Linear growth then plateau when no more neighbors
+  
+WHAT THIS TEACHES:
+  "This is how a virus spreads - reaching nearby computers first, then
+   their neighbors, level by level. BFS guarantees finding all reachable nodes."
+
+================================================================================
+
+TEST SCENARIO 1.2: Dense Network Spreading
+-------------------------------------------
+DESCRIPTION: Threat spreading in a highly connected network
+
+SETUP:
+  Network Size: 15 nodes
+  Topology: scale-free
+  Algorithm: BFS
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Fast spreading (scale-free has hub nodes)
+  - Many nodes in frontier at each step
+  - Completes in fewer total steps than small network
+  - Some nodes never reached if isolated
+  
+METRICS TO CHECK:
+  Total Steps: 6-8 (fewer due to hubs)
+  Nodes Visited: 12-15 (more connected network)
+  Frontier Size: Grows quickly early, shrinks at end
+  
+WHAT THIS TEACHES:
+  "Hub nodes (popular servers) cause faster threat spread. More connections
+   mean faster compromise but also more visible attack pattern."
+
+================================================================================
+
+TEST SCENARIO 1.3: Small-World Network
+--------------------------------------
+DESCRIPTION: BFS in realistic clustered network
+
+SETUP:
+  Network Size: 20 nodes
+  Topology: small-world
+  Algorithm: BFS
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Explores one cluster deeply first
+  - Then bridges to other clusters
+  - Stepped growth pattern (not smooth)
+  - Boundary nodes act as bridges between clusters
+  
+METRICS TO CHECK:
+  Total Steps: 12-15
+  Nodes Visited: 15-20
+  Visited pattern: Shows cluster structure
+  
+WHAT THIS TEACHES:
+  "Real networks have clusters (departments, subnets). BFS shows how
+   threats spread within clusters first, then jump between them."
+
+================================================================================
+SECTION 2: DFS (DEPTH-FIRST SEARCH) - "Deep Exploration"
+================================================================================
+
+TEST SCENARIO 2.1: Cycle Detection
+----------------------------------
+DESCRIPTION: Find if there are attack loops in the network
+
+SETUP:
+  Network Size: 12 nodes
+  Topology: random
+  Algorithm: DFS
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Explores one path all the way to a dead end
+  - Backtracks to explore alternative paths
+  - Visited nodes show deep penetration before exploring breadth
+  - Different order than BFS but same nodes reached
+  
+METRICS TO CHECK:
+  Total Steps: Similar to BFS (~12-14)
+  Nodes Visited: Same as BFS
+  Order: DIFFERENT from BFS
+  Pattern: Zigzag (deep then backtrack) vs BFS smooth spread
+  
+WHAT THIS TEACHES:
+  "DFS explores one attack path completely before trying others. Useful for
+   finding if there's a cycle (loop) that could trap defenders."
+
+================================================================================
+
+TEST SCENARIO 2.2: Path Finding
+-------------------------------
+DESCRIPTION: Trace a specific attack path through the network
+
+SETUP:
+  Network Size: 15 nodes
+  Topology: scale-free
+  Algorithm: DFS
+  Start Node: node_1
+
+EXPECTED BEHAVIOR:
+  - Follows edges deeply into network
+  - May visit one distant node before exploring nearby nodes (unlike BFS)
+  - Shows one possible attack vector before showing others
+  - Step-by-step shows exactly which path is followed
+  
+METRICS TO CHECK:
+  Total Steps: Similar to BFS
+  Nodes Visited: Similar to BFS
+  Path Length: Check animation for actual path taken
+  
+WHAT THIS TEACHES:
+  "This shows one possible attack chain: node_1 → node_5 → node_12 → node_8.
+   Defenders could monitor these specific paths."
+
+================================================================================
+
+TEST SCENARIO 2.3: DFS vs BFS Comparison
+-----------------------------------------
+DESCRIPTION: Compare same network with both algorithms
+
+SETUP (Run this twice):
+  Run 1: Network 20 nodes, random, BFS from node_0
+  Run 2: SAME NETWORK, DFS from node_0
+
+EXPECTED BEHAVIOR:
+  - Both visit same total nodes
+  - Both take similar total steps
+  - ORDER of visiting is completely different
+  - BFS is systematic (level by level)
+  - DFS is exploratory (deep then backtrack)
+  
+METRICS TO CHECK:
+  Total Steps: Very similar (both O(V+E))
+  Nodes Visited: Identical
+  Animation: Completely different patterns
+  Cost: Same final cost
+  
+WHAT THIS TEACHES:
+  "Same problem, different approaches. Both optimal for unweighted graphs.
+   BFS: 'When did you discover each node?'
+   DFS: 'What's the complete attack chain?'"
+
+================================================================================
+SECTION 3: DIJKSTRA - "Optimal Shortest Path"
+================================================================================
+
+TEST SCENARIO 3.1: Point-to-Point Shortest Path
+-----------------------------------------------
+DESCRIPTION: Find optimal route to reach critical server
+
+SETUP:
+  Network Size: 15 nodes
+  Topology: random
+  Algorithm: Dijkstra
+  Start Node: node_0
+  End Node: node_14
+
+EXPECTED BEHAVIOR:
+  - Explores nodes in order of distance from start
+  - Not level-by-level like BFS (accounts for edge weights)
+  - Always picks closest unvisited node
+  - Finds guaranteed shortest path
+  
+METRICS TO CHECK:
+  Total Steps: 10-15
+  Nodes Visited: 12-15
+  Final Cost: Should be minimum possible
+  Cost should be optimal (compared to BFS which may not be)
+  
+WHAT THIS TEACHES:
+  "Dijkstra guarantees finding the shortest path. Each step picks the
+   nearest node, ensuring optimality. Cost matters, not just distance."
+
+================================================================================
+
+TEST SCENARIO 3.2: Network Latency Optimization
+----------------------------------------------
+DESCRIPTION: Route data through fastest path
+
+SETUP:
+  Network Size: 20 nodes
+  Topology: scale-free
+  Algorithm: Dijkstra
+  Start Node: node_2
+  End Node: node_18
+
+EXPECTED BEHAVIOR:
+  - Might skip nearby nodes for cheaper distant ones
+  - Animation shows it's NOT exploring uniformly
+  - Prefers low-cost paths over physically close ones
+  - Completes when reaching destination (not all nodes)
+  
+METRICS TO CHECK:
+  Total Steps: 15-20
+  Nodes Visited: 18-20
+  Final Cost: Low number (optimized)
+  Path: Should be shortest according to edge weights
+  
+WHAT THIS TEACHES:
+  "In real networks, distance isn't everything. Edge weights represent
+   bandwidth, latency, or reliability. Dijkstra accounts for this."
+
+================================================================================
+
+TEST SCENARIO 3.3: Dijkstra vs BFS Comparison
+--------------------------------------------
+DESCRIPTION: Show why Dijkstra matters for weighted graphs
+
+SETUP (Same network, two tests):
+  Network: 15 nodes, random
+  Test 1: BFS from node_0 to node_10
+  Test 2: Dijkstra from node_0 to node_10
+
+EXPECTED BEHAVIOR:
+  - Both find paths
+  - BFS finds shortest in hops
+  - Dijkstra finds shortest in cost
+  - May be different paths!
+  - Dijkstra cost < BFS cost in weighted graph
+  
+METRICS TO CHECK:
+  Total Steps: Similar
+  Nodes Visited: Similar
+  Final Cost: Dijkstra should be lower
+  
+WHAT THIS TEACHES:
+  "BFS: 'How many hops?'
+   Dijkstra: 'What's the minimum cost?'
+   Different problems, different algorithms."
+
+================================================================================
+SECTION 4: GREEDY - "Fast Heuristic"
+================================================================================
+
+TEST SCENARIO 4.1: Budget-Constrained Patching
+----------------------------------------------
+DESCRIPTION: Patch highest-risk systems with limited budget
+
+SETUP:
+  Network Size: 20 nodes
+  Topology: random
+  Algorithm: Greedy
+  Budget: 3000
+
+EXPECTED BEHAVIOR:
+  - Selects high-priority threats first
+  - Stops when budget runs out
+  - Fast algorithm (completes quickly)
+  - May NOT be optimal (some better combination possible)
+  - Practical for real-time decisions
+  
+METRICS TO CHECK:
+  Total Steps: 6-10 (very fast!)
+  Threat Count: Should be 5-8 threats selected
+  Total Cost: Close to but not exceeding 3000
+  Risk Reduced: Significant but check if optimal
+  
+WHAT THIS TEACHES:
+  "Speed matters in security! Greedy is fast but sacrifices optimality.
+   Good for emergency response when you can't wait for perfect solution."
+
+================================================================================
+
+TEST SCENARIO 4.2: Resource Allocation Under Pressure
+-----------------------------------------------------
+DESCRIPTION: Allocate security team resources during active threat
+
+SETUP:
+  Network Size: 15 nodes
+  Topology: scale-free
+  Algorithm: Greedy
+  Budget: 2000
+
+EXPECTED BEHAVIOR:
+  - Quickly identifies which nodes to protect
+  - Greedy picks highest-value targets
+  - Hub nodes likely selected first (high impact)
+  - Completes in few steps
+  - Solution is good but not guaranteed optimal
+  
+METRICS TO CHECK:
+  Total Steps: 8-12
+  Items Selected: 4-6 critical systems
+  Total Value: Decent coverage
+  Efficiency: Cost per unit value
+  
+WHAT THIS TEACHES:
+  "Under attack, you don't have time for complex optimization. Greedy says:
+   'Protect the most critical systems first, within budget, right now!'"
+
+================================================================================
+
+TEST SCENARIO 4.3: Greedy vs Knapsack Comparison
+-----------------------------------------------
+DESCRIPTION: Compare speed (Greedy) vs optimality (Knapsack)
+
+SETUP (Same network):
+  Network: 18 nodes, random
+  Capacity/Budget: 2500
+  Test 1: Greedy
+  Test 2: Knapsack
+
+EXPECTED BEHAVIOR:
+  - Greedy completes in 8-10 steps, very fast
+  - Knapsack takes longer (50+ steps)
+  - Greedy: ~80-85% optimal
+  - Knapsack: 100% optimal
+  - Knapsack selects better combination of items
+  
+METRICS TO CHECK:
+  Greedy Total Steps: 8-12
+  Knapsack Total Steps: 50-100
+  Greedy Total Value: Good
+  Knapsack Total Value: Better/Equal
+  Greedy Cost: Fast
+  Knapsack Cost: Slow but perfect
+  
+WHAT THIS TEACHES:
+  "Greedy trades optimality for speed. In emergencies, 85% solution in
+   10 steps beats 100% solution in 100 steps."
+
+================================================================================
+SECTION 5: KNAPSACK (Dynamic Programming) - "Perfect Optimization"
+================================================================================
+
+TEST SCENARIO 5.1: Optimal Security Tool Selection
+--------------------------------------------------
+DESCRIPTION: Choose security tools for maximum protection within budget
+
+SETUP:
+  Network Size: 16 nodes
+  Topology: random
+  Algorithm: Knapsack
+  Capacity: 3500
+
+EXPECTED BEHAVIOR:
+  - Takes longer than Greedy (many steps)
+  - Finds guaranteed optimal combination
+  - May select different items than Greedy
+  - More value per unit cost than Greedy
+  - DP table fills up showing all possibilities
+  
+METRICS TO CHECK:
+  Total Steps: 40-80 (depends on items and capacity)
+  Total Value: Maximum possible
+  Total Cost: Close to but not exceeding 3500
+  Items Selected: 6-8 items
+  Value per Unit: Higher than Greedy
+  
+WHAT THIS TEACHES:
+  "When you have time and need the BEST solution, use Knapsack.
+   DP explores all combinations intelligently, guaranteeing optimality."
+
+================================================================================
+
+TEST SCENARIO 5.2: Patch Management Optimization
+-----------------------------------------------
+DESCRIPTION: Maximum security impact from limited patch budget
+
+SETUP:
+  Network Size: 14 nodes
+  Topology: scale-free
+  Algorithm: Knapsack
+  Capacity: 2000
+
+EXPECTED BEHAVIOR:
+  - Explores many combinations (many steps)
+  - Considers each patch's size and value
+  - Finds combination giving maximum security improvement
+  - Each item included exactly once (0/1 knapsack)
+  - Backtracking shows which items were selected
+  
+METRICS TO CHECK:
+  Total Steps: 50-120
+  Items Selected: 5-7
+  Total Value: Optimized
+  Security Improvement: Maximum within budget
+  Execution Time: Longer than Greedy
+  
+WHAT THIS TEACHES:
+  "For planned maintenance (not emergencies), take time to find perfect
+   combination of patches. Knapsack guarantees best use of budget."
+
+================================================================================
+
+TEST SCENARIO 5.3: Knapsack Details Inspection
+----------------------------------------------
+DESCRIPTION: Understand Knapsack decision-making
+
+SETUP:
+  Network Size: 10 nodes
+  Topology: random
+  Algorithm: Knapsack
+  Capacity: 1500
+
+USE ANIMATION TAB:
+  Go to Animation tab
+  Step through slowly
+  Observe:
+    - DP table building up
+    - Different items being considered
+    - Values being compared
+    - Final selection revealed
+
+EXPECTED BEHAVIOR:
+  - Early steps: Initialize table
+  - Middle steps: Fill table with item values
+  - Late steps: Trace back to find selected items
+  - Each step shows a cell in the DP table
+  
+WHAT THIS TEACHES:
+  "Step-by-step watch how DP builds knowledge about all combinations.
+   The backtracking at the end reveals which items make the optimal set."
+
+================================================================================
+SECTION 6: TSP (Traveling Salesman Problem) - "Route Planning"
+================================================================================
+
+TEST SCENARIO 6.1: Security Audit Tour
+--------------------------------------
+DESCRIPTION: Optimal order to audit all systems
+
+SETUP:
+  Network Size: 12 nodes
+  Topology: small-world
+  Algorithm: TSP
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Finds a good order to visit all nodes exactly once
+  - Uses "nearest neighbor" heuristic
+  - Route isn't perfect but practical
+  - Creates a tour (returns to start)
+  - Shows route order in results
+  
+METRICS TO CHECK:
+  Total Steps: 12-14
+  Route Length: Reasonable distance
+  Nodes Visited: All 12 nodes
+  Quality: ~120% of optimal (heuristic)
+  
+WHAT THIS TEACHES:
+  "TSP is NP-hard (extremely difficult to solve optimally). We use heuristics.
+   Nearest neighbor: 'From current location, go to nearest unvisited.'
+   Good enough for practical use, fast enough for real problems."
+
+================================================================================
+
+TEST SCENARIO 6.2: Incident Response Team Route
+-----------------------------------------------
+DESCRIPTION: Route security team through network for response
+
+SETUP:
+  Network Size: 15 nodes
+  Topology: random
+  Algorithm: TSP
+  Start Node: node_5
+
+EXPECTED BEHAVIOR:
+  - Team starts at node_5
+  - Routes to nearby nodes first (nearest neighbor)
+  - Completes tour visiting all nodes
+  - Returns to starting point
+  - Total distance reasonable
+  
+METRICS TO CHECK:
+  Total Steps: 15-17
+  Total Distance: Not too long
+  Route: Should show smart sequencing
+  Travel Time: Minimized by nearest neighbor
+  
+WHAT THIS TEACHES:
+  "Real security teams need to physically move. TSP helps plan efficient
+   routes. Perfect routes are hard to compute, good ones are enough."
+
+================================================================================
+
+TEST SCENARIO 6.3: Large Network Tour
+-------------------------------------
+DESCRIPTION: See how TSP scales
+
+SETUP:
+  Network Size: 25 nodes
+  Topology: scale-free
+  Algorithm: TSP
+  Start Node: node_0
+
+EXPECTED BEHAVIOR:
+  - Takes longer (more nodes = longer route)
+  - Still practical (faster than exact solutions)
+  - Route shows logical grouping (scale-free structure)
+  - Hubs visited first (nearest neighbor favors hubs)
+  - Animation shows systematic tour
+  
+METRICS TO CHECK:
+  Total Steps: 25-30
+  Total Distance: Increases with network size
+  Efficiency: Nearest neighbor still works well
+  Hub Priority: May show hubs visited early/often
+  
+WHAT THIS TEACHES:
+  "TSP scales better than exact solutions. Even with 25 nodes, nearest
+   neighbor finds good routes fast. Exact solution would take forever."
+
+================================================================================
+SECTION 7: BRANCH & BOUND - "Exact Optimization"
+================================================================================
+
+TEST SCENARIO 7.1: Optimal Attack Containment
+---------------------------------------------
+DESCRIPTION: Find best way to contain spreading attack
+
+SETUP:
+  Network Size: 12 nodes
+  Topology: random
+  Algorithm: Branch & Bound
+  Budget: 2500
+
+EXPECTED BEHAVIOR:
+  - Takes longer than Greedy or TSP
+  - Explores many branches systematically
+  - Prunes branches that can't be optimal
+  - Guarantees finding best solution
+  - Many steps but fewer than brute force
+  
+METRICS TO CHECK:
+  Total Steps: 40-80
+  Solution Quality: Optimal (100%)
+  Total Cost: Optimal within budget
+  Items Selected: Best combination
+  Pruning Efficiency: See how many branches pruned
+  
+WHAT THIS TEACHES:
+  "Branch & Bound = Best of both worlds:
+   - Speed: Pruning eliminates bad options
+   - Optimality: Guarantees best solution
+   - Trade-off: Slower than heuristics, faster than brute force"
+
+================================================================================
+
+TEST SCENARIO 7.2: Critical Infrastructure Protection
+----------------------------------------------------
+DESCRIPTION: Protect most important systems with limited resources
+
+SETUP:
+  Network Size: 14 nodes
+  Topology: scale-free
+  Algorithm: Branch & Bound
+  Budget: 3000
+
+EXPECTED BEHAVIOR:
+  - Explores different protection strategies
+  - Each step evaluates combinations
+  - Prunes clearly suboptimal options
+  - Finds perfect combination for maximum resilience
+  - Shows which systems MUST be protected
+  
+METRICS TO CHECK:
+  Total Steps: 60-100
+  Nodes Protected: 6-8 critical systems
+  Total Value: Maximum protection
+  Total Cost: ~3000 (optimal use of budget)
+  Critical Ratio: 100% of critical systems protected
+  
+WHAT THIS TEACHES:
+  "For truly important decisions, invest time. B&B guarantees the best
+   strategy. For company-critical systems, 100 steps is worth it."
+
+================================================================================
+
+TEST SCENARIO 7.3: Branch & Bound vs Alternatives
+-------------------------------------------------
+DESCRIPTION: Compare all optimization algorithms
+
+SETUP (4 separate runs, same network):
+  Network: 14 nodes, random
+  Capacity/Budget: 2500
+  
+  Run 1: Greedy
+  Run 2: TSP (tour variant)
+  Run 3: Knapsack
+  Run 4: Branch & Bound
+
+EXPECTED RESULTS:
+  Greedy:
+    Steps: 8-12
+    Solution Quality: ~80% optimal
+    Speed: Very fast
+    
+  TSP:
+    Steps: 15-20
+    Solution: ~120% of optimal
+    Speed: Fast
+    
+  Knapsack:
+    Steps: 50-80
+    Solution Quality: 100% optimal
+    Speed: Medium
+    
+  Branch & Bound:
+    Steps: 40-100
+    Solution Quality: 100% optimal
+    Speed: Medium (depends on pruning)
+
+COMPARISON TABLE:
+Algorithm        Speed      Optimality    When To Use
+Greedy           Fastest    ~80%          Emergency response
+TSP              Fast       ~120%         Route planning
+Knapsack         Medium     100%          Planned optimization
+Branch & Bound   Medium     100%          Critical decisions
+
+WHAT THIS TEACHES:
+  "Different algorithms for different needs:
+  - When: Emergency? → Greedy (speed)
+  - When: Route? → TSP (practical)
+  - When: Perfect? → Knapsack or B&B (quality)
+  - When: Critical? → B&B (guaranteed + practical)"
+
+================================================================================
+SECTION 8: COMPREHENSIVE MULTI-ALGORITHM TEST
+================================================================================
+
+TEST SCENARIO 8.1: Complete Project Demonstration
+-------------------------------------------------
+DESCRIPTION: Show all 7 algorithms on same 20-node network
+
+SETUP:
+  Network Size: 20 nodes
+  Topology: small-world (realistic)
+  Start Node: node_0
+  End Node: node_19
+  Budget: 3000
+
+PROCEDURE:
+  1. Go to Network tab
+  2. Create 20-node small-world network
+  3. Note network properties
+  4. For EACH algorithm, go to Control tab and run:
+
+ALGORITHM 1: BFS
+  Expected: All nodes visited in waves
+  Metric: 20 steps total, ~10 frontier at peak
+  Learning: Basic graph traversal
+
+ALGORITHM 2: DFS
+  Expected: Deep exploration then backtrack
+  Metric: 20 steps, different order than BFS
+  Learning: Alternative traversal, cycle detection
+  
+ALGORITHM 3: Dijkstra (node_0 to node_19)
+  Expected: Optimal path found
+  Metric: 15-18 steps, lowest final cost
+  Learning: Optimal shortest paths matter
+  
+ALGORITHM 4: Greedy (Budget 3000)
+  Expected: Quick selection of items
+  Metric: 8-10 steps, ~80% optimal value
+  Learning: Speed vs optimality trade-off
+  
+ALGORITHM 5: Knapsack (Capacity 3000)
+  Expected: Perfect selection
+  Metric: 60-100 steps, optimal value
+  Learning: DP finds perfect solutions
+  
+ALGORITHM 6: TSP (node_0 start)
+  Expected: Full tour of all nodes
+  Metric: 20-25 steps, reasonable distance
+  Learning: Route planning is practical
+  
+ALGORITHM 7: Branch & Bound (Budget 3000)
+  Expected: Perfect solution with pruning
+  Metric: 50-80 steps, 100% optimal
+  Learning: Pruning makes exact solutions practical
+
+COMPARISON INSIGHTS:
+  1. Which was fastest? → Greedy (8-10 steps)
+  2. Which took longest? → Knapsack or B&B (80-100 steps)
+  3. Which found best solution? → Knapsack, B&B, Dijkstra
+  4. Which was most practical? → Depends on problem type
+  5. How are they related? → Different solutions to different problems
+
+WHAT THIS TEACHES:
+  "One network, 7 different approaches. Each has advantages and trade-offs.
+   The best algorithm depends on your specific problem and constraints."
+
+================================================================================
+SECTION 9: EDGE CASES AND SPECIAL SCENARIOS
+================================================================================
+
+TEST SCENARIO 9.1: Minimum Network
+----------------------------------
+SETUP:
+  Network Size: 5 nodes
+  Topology: random
+  Algorithm: Any
+
+EXPECTED:
+  - Quick to complete
+  - Easy to follow and understand
+  - Good for teaching basics
+  - Perfect for tutorials
+
+================================================================================
+
+TEST SCENARIO 9.2: Maximum Network
+----------------------------------
+SETUP:
+  Network Size: 100 nodes
+  Topology: scale-free
+  Algorithm: Any
+
+EXPECTED:
+  - Slower animation
+  - Harder to see individual nodes
+  - Shows algorithm scalability
+  - May highlight performance differences
+
+================================================================================
+
+TEST SCENARIO 9.3: Densely Connected Network
+--------------------------------------------
+SETUP:
+  Network Size: 15 nodes
+  Topology: scale-free (naturally dense with hubs)
+  Algorithm: Any
+
+EXPECTED:
+  - Quick exploration
+  - Hub nodes get visited early
+  - Threats spread quickly
+  - Good for showing network connectivity impact
+
+================================================================================
+
+TEST SCENARIO 9.4: Sparsely Connected Network
+---------------------------------------------
+SETUP:
+  Network Size: 20 nodes
+  Topology: random
+  Algorithm: BFS
+
+EXPECTED:
+  - Many isolated components possible
+  - Not all nodes reachable from start
+  - Shows disconnected components
+  - Teaching: Not all networks are one cluster
+
+================================================================================
+SECTION 10: ASSESSMENT QUESTIONS FOR STUDENTS
+================================================================================
+
+After running these tests, ask students:
+
+1. BFS UNDERSTANDING:
+   "Why does BFS explore level by level? Draw what layer 3 means."
+   Answer: Each layer is +1 distance from source
+   
+2. DFS vs BFS:
+   "Both visited 15 nodes in ~15 steps. Why is the order different?"
+   Answer: BFS: breadth first, DFS: depth first
+   
+3. DIJKSTRA:
+   "Why did Dijkstra take a longer path than BFS?"
+   Answer: Edge weights - some edges are cheaper even if longer
+   
+4. GREEDY:
+   "Greedy completed in 10 steps, Knapsack in 80. Why so different?"
+   Answer: Greedy quick decision, Knapsack tries all combinations
+   
+5. KNAPSACK:
+   "What does 'backtracking' mean at the end of Knapsack?"
+   Answer: Finding which items are in the optimal solution
+   
+6. TSP:
+   "Why isn't TSP visiting nodes in order 0, 1, 2, 3...?"
+   Answer: Nearest neighbor - goes to closest unvisited, not next
+   
+7. BRANCH & BOUND:
+   "How does B&B find the same solution as Knapsack faster sometimes?"
+   Answer: Pruning eliminates bad branches early
+   
+8. COMPLEXITY:
+   "Which algorithm completed fastest? Which took longest? Why?"
+   Answer: Greedy fastest (O(n)), algorithms vary by approach
+   
+9. REAL-WORLD:
+   "You're under attack - choose Greedy or Knapsack? Why?"
+   Answer: Greedy - no time for perfect solution
+   
+10. OPTIMIZATION:
+    "You have 3 days to choose security tools. Now what?"
+    Answer: Knapsack or B&B - time allows optimal solution
+
+================================================================================
+SCORING RUBRIC FOR STUDENT TESTING
+================================================================================
+
+Each student/group can follow the scenarios above and be graded on:
+
+Algorithm Understanding (25 points):
+  - Can explain what each algorithm does? (5)
+  - Can run each algorithm correctly? (5)
+  - Can interpret the metrics? (5)
+  - Can explain step-by-step what happens? (5)
+  - Can answer algorithm questions? (5)
+
+Comparison Skills (25 points):
+  - Understands when to use each algorithm? (5)
+  - Can identify advantages/disadvantages? (5)
+  - Can predict which will be faster? (5)
+  - Can explain speed vs optimality trade-offs? (5)
+  - Can suggest algorithm for new problem? (5)
+
+Real-World Application (25 points):
+  - Understands cybersecurity context? (5)
+  - Can relate algorithm to real threats? (5)
+  - Can explain why certain algorithm chosen? (5)
+  - Can design scenario for an algorithm? (5)
+  - Can present findings to class? (5)
+
+Technical Skills (25 points):
+  - Uses dashboard correctly? (5)
+  - Interprets analytics correctly? (5)
+  - Can compare outputs across runs? (5)
+  - Can troubleshoot when stuck? (5)
+  - Can document findings? (5)
+
+TOTAL: 100 points
+
+================================================================================
+END OF TEST SCENARIOS
+================================================================================
+
+For questions or to add more scenarios, refer to:
+  - README.md: Technical documentation
+  - USER_GUIDE.md: Detailed tab explanations
+  - Algorithm implementations: project/algorithms/*.py
+
+Happy testing!

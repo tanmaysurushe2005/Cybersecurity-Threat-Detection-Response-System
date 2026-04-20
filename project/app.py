@@ -83,6 +83,10 @@ def initialize_session_state():
         st.session_state.threat_history = []
     if 'animation_speed' not in st.session_state:
         st.session_state.animation_speed = 1.0
+    if 'is_playing' not in st.session_state:
+        st.session_state.is_playing = False
+    if 'last_play_time' not in st.session_state:
+        st.session_state.last_play_time = 0
 
 
 def create_network_visualization(graph: NetworkGraph, step_data: Optional[Dict] = None) -> go.Figure:
@@ -125,18 +129,28 @@ def create_network_visualization(graph: NetworkGraph, step_data: Optional[Dict] 
         y_coords.append(y)
         node_ids.append(node_id)
         
-        # Determine node color based on status
-        node_data = graph.get_node_data(node_id)
-        if node_data.is_compromised:
-            node_colors.append('#FF0000')  # Red for infected
+        # Determine node color based on algorithm step data (if available)
+        if step_data:
+            visited_nodes = step_data.get('visited_nodes', [])
+            current_node = step_data.get('current_node')
+            
+            # Color priority: Current (yellow) > Visited (red) > Unvisited (green)
+            if node_id == current_node:
+                node_colors.append('#FFFF00')  # Yellow for current
+            elif node_id in visited_nodes:
+                node_colors.append('#FF0000')  # Red for visited
+            else:
+                node_colors.append('#00CC00')  # Green for unvisited
         else:
-            node_colors.append('#00CC00')  # Green for normal
-        
-        # Highlight current node if in step data
-        if step_data and node_id == step_data.get('current_node'):
-            node_colors[-1] = '#FFFF00'  # Yellow for current
+            # No step data: use network's compromise status
+            node_data = graph.get_node_data(node_id)
+            if node_data.is_compromised:
+                node_colors.append('#FF0000')  # Red for compromised
+            else:
+                node_colors.append('#00CC00')  # Green for normal
         
         # Size based on risk level
+        node_data = graph.get_node_data(node_id)
         node_sizes.append(20 + node_data.risk_level * 30)
     
     # Create edge traces
@@ -191,22 +205,45 @@ def create_network_visualization(graph: NetworkGraph, step_data: Optional[Dict] 
 
 def render_network_panel():
     """Render the network visualization panel."""
-    st.subheader("🌐 Network Visualization")
+    st.subheader("Network Visualization & Creation")
     
+    # Network creation section
     if st.session_state.network is None:
-        st.info("Create a network first to visualize it.")
+        st.info("Create a network below to get started")
+        
+        with st.expander("Network Configuration", expanded=True):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                num_nodes = st.slider("Number of Nodes", 5, 100, 20, key="nn_num_nodes")
+                topology = st.selectbox("Topology", ["random", "scale-free", "small-world"], key="nn_topology")
+            
+            with col2:
+                st.write("")
+                st.write("")
+                if st.button("Create Network", key="nn_create_network", use_container_width=True):
+                    with st.spinner("Creating network..."):
+                        st.session_state.network = NetworkGraph(num_nodes, topology)
+                        st.session_state.threat_simulator = ThreatSimulator(st.session_state.network)
+                        st.session_state.algorithm_engine = AlgorithmEngine(st.session_state.network)
+                        st.success(f"Network created: {num_nodes} nodes, {topology} topology")
+                        st.rerun()
+        
         return
     
+    # Display visualization
     # Get step data if algorithm is running
     step_data = None
     if st.session_state.algorithm_running and st.session_state.current_algorithm:
-        step_history = st.session_state.current_algorithm.step_tracker.get_all_steps()
-        if step_history and st.session_state.current_step < len(step_history):
-            step_data = step_history[st.session_state.current_step].__dict__
+        step_tracker = st.session_state.current_algorithm.step_tracker
+        if step_tracker:
+            step_history = step_tracker.get_all_steps()
+            if step_history and st.session_state.current_step < len(step_history):
+                step_data = step_history[st.session_state.current_step].__dict__
     
     # Create and display visualization
     fig = create_network_visualization(st.session_state.network, step_data)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key="network_viz")
     
     # Display network metrics
     col1, col2, col3, col4 = st.columns(4)
@@ -221,46 +258,46 @@ def render_network_panel():
         st.metric("Density", f"{metrics['density']:.3f}")
     with col4:
         st.metric("Avg Degree", f"{metrics['avg_degree']:.2f}")
+    
+    # Reset button
+    if st.button("Reset Network", key="reset_network"):
+        st.session_state.network = None
+        st.session_state.threat_simulator = None
+        st.session_state.algorithm_engine = None
+        st.session_state.algorithm_running = False
+        st.rerun()
 
 
 def render_control_panel():
     """Render the control panel for algorithm selection and execution."""
-    st.subheader("⚙️ Control Panel")
+    st.subheader("Control Panel - Algorithm Execution")
     
-    col1, col2 = st.columns([2, 1])
+    # Check if network exists
+    if st.session_state.network is None:
+        st.error("No network created yet!")
+        st.info("Go to the **Network** tab to create a network first")
+        return
     
+    # Quick actions
+    col1, col2 = st.columns(2)
     with col1:
-        # Network creation
-        st.write("**Network Configuration**")
-        num_nodes = st.slider("Number of Nodes", 5, 100, 20, key="num_nodes")
-        topology = st.selectbox("Topology", ["random", "scale-free", "small-world"], key="topology")
-        
-        if st.button("Create Network", key="create_network"):
-            with st.spinner("Creating network..."):
-                st.session_state.network = NetworkGraph(num_nodes, topology)
-                st.session_state.threat_simulator = ThreatSimulator(st.session_state.network)
-                st.session_state.algorithm_engine = AlgorithmEngine(st.session_state.network)
-                st.success(f"Network created: {num_nodes} nodes, {topology} topology")
-    
+        st.metric("Network Status", "Active")
     with col2:
-        st.write("**Quick Actions**")
-        if st.button("Reset All", key="reset_all"):
+        if st.button("Reset All", key="reset_all_ctrl"):
             st.session_state.network = None
             st.session_state.threat_simulator = None
             st.session_state.algorithm_engine = None
             st.session_state.algorithm_running = False
             st.session_state.current_step = 0
-            st.success("System reset")
-    
-    if st.session_state.network is None:
-        st.warning("Create a network first")
-        return
+            st.success("System reset - Go to Network tab to create a new network")
+            st.rerun()
     
     # Algorithm selection
-    st.write("**Algorithm Selection**")
+    st.write("---")
+    st.write("**Select and Run Algorithm**")
     algorithm = st.selectbox(
         "Select Algorithm",
-        ["BFS", "DFS", "Dijkstra", "Greedy", "Knapsack", "TSP", "BranchAndBound"],
+        ["BFS", "DFS", "Dijkstra", "Greedy", "TSP", "BranchAndBound"],
         key="algorithm_select"
     )
     
@@ -314,19 +351,6 @@ def render_control_panel():
             
             st.success("Greedy completed")
     
-    elif algorithm == "Knapsack":
-        capacity = st.slider("Capacity", 100, 10000, 1000, key="knapsack_capacity")
-        
-        if st.button("Run Algorithm", key="run_knapsack"):
-            st.session_state.current_algorithm = st.session_state.algorithm_engine
-            st.session_state.algorithm_running = True
-            st.session_state.current_step = 0
-            
-            with st.spinner("Running Knapsack..."):
-                st.session_state.algorithm_engine.execute_knapsack(capacity)
-            
-            st.success("Knapsack completed")
-    
     elif algorithm == "TSP":
         start_node = st.selectbox("Start Node", st.session_state.network.get_all_nodes(), key="tsp_start")
         
@@ -357,11 +381,11 @@ def render_control_panel():
 
 
 def render_animation_panel():
-    """Render the algorithm animation panel."""
-    st.subheader("▶️ Algorithm Animation")
+    """Render the algorithm animation panel with network visualization."""
+    st.subheader("Algorithm Animation")
     
     if not st.session_state.algorithm_running or st.session_state.current_algorithm is None:
-        st.info("Run an algorithm first to see animation")
+        st.info("Run an algorithm from the Control Panel to see animation here")
         return
     
     step_tracker = st.session_state.current_algorithm.step_tracker
@@ -371,59 +395,48 @@ def render_animation_panel():
         st.warning("No steps recorded")
         return
     
-    # Step navigation
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("⏮️ First", key="first_step"):
-            st.session_state.current_step = 0
-    
-    with col2:
-        st.session_state.current_step = st.slider(
-            "Step",
-            0, total_steps - 1,
-            st.session_state.current_step,
-            key="step_slider"
-        )
-    
-    with col3:
-        if st.button("⏭️ Last", key="last_step"):
-            st.session_state.current_step = total_steps - 1
-    
-    # Display current step
-    current_step_data = step_tracker.get_step(st.session_state.current_step)
-    
-    st.write(f"**Step {st.session_state.current_step + 1} of {total_steps}**")
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("Current Node", current_step_data.current_node or "N/A")
-    with col2:
-        st.metric("Visited Nodes", len(current_step_data.visited_nodes))
-    with col3:
-        st.metric("Frontier Nodes", len(current_step_data.frontier_nodes))
-    with col4:
-        st.metric("Cost", f"{current_step_data.cost:.2f}")
-    
-    # Animation speed control
-    st.session_state.animation_speed = st.slider(
-        "Animation Speed",
-        0.5, 2.0, 1.0, 0.1,
-        key="animation_speed"
+    # Step navigation with slider only
+    st.write("### Navigate Through Steps")
+    st.session_state.current_step = st.slider(
+        "Step",
+        0, total_steps - 1,
+        st.session_state.current_step,
+        key="step_slider"
     )
     
-    # Auto-play
-    if st.button("▶️ Play", key="play_animation"):
-        for step in range(st.session_state.current_step, total_steps):
-            st.session_state.current_step = step
-            st.rerun()
-            time.sleep(1.0 / st.session_state.animation_speed)
+    # Display current step info
+    current_step_data = step_tracker.get_step(st.session_state.current_step)
+    st.write(f"**Step {st.session_state.current_step + 1} of {total_steps}**")
+    
+    # MAIN LAYOUT: Two columns - Network visualization and Metrics
+    viz_col, metrics_col = st.columns([2, 1])
+    
+    with viz_col:
+        # Create network visualization with current step data
+        step_data_dict = current_step_data.__dict__ if current_step_data else None
+        fig = create_network_visualization(st.session_state.network, step_data_dict)
+        st.plotly_chart(fig, use_container_width=True, key="animation_network_viz")
+    
+    with metrics_col:
+        st.write("### Step Metrics")
+        
+        # Display metrics in a column format
+        st.metric("Current Node", current_step_data.current_node or "N/A")
+        st.metric("Visited Nodes", len(current_step_data.visited_nodes))
+        st.metric("Frontier Nodes", len(current_step_data.frontier_nodes))
+        st.metric("Cost", f"{current_step_data.cost:.2f}")
+        
+        # Additional info
+        st.divider()
+        st.write("**Algorithm Progress**")
+        progress = (st.session_state.current_step + 1) / total_steps
+        st.progress(progress)
+        st.caption(f"{(progress * 100):.1f}% Complete")
 
 
 def render_threat_monitor():
     """Render the threat monitor panel."""
-    st.subheader("⚠️ Threat Monitor")
+    st.subheader("Threat Monitor")
     
     if st.session_state.network is None:
         st.info("Create a network first")
@@ -467,7 +480,7 @@ def render_threat_monitor():
 
 def render_analytics_panel():
     """Render the performance analytics panel."""
-    st.subheader("📊 Performance Analytics")
+    st.subheader("Performance Analytics")
     
     if not st.session_state.algorithm_running or st.session_state.current_algorithm is None:
         st.info("Run an algorithm first to see analytics")

@@ -1,0 +1,438 @@
+================================================================================
+VISUAL QUICK REFERENCE - WHAT EACH TAB DOES
+================================================================================
+
+TAB 1: NETWORK
+==============
+
+WHAT: Create and view your computer network
+
+    [NETWORK CONFIGURATION]
+    ┌─────────────────────┐
+    │ Nodes: [=====20====] │
+    │ Topology: [v]       │
+    │  - random           │
+    │  - scale-free       │
+    │  - small-world      │
+    │                     │
+    │ [✨ CREATE NETWORK] │
+    └─────────────────────┘
+              │
+              ↓
+    ┌─────────────────────┐
+    │   NETWORK GRAPH     │
+    │  (Green dots & lines)
+    │      ●─────●        │
+    │      │╲   ╱│        │
+    │      │ ● ●  │        │
+    │      │  ╲│╱ │        │
+    │      ●─────●        │
+    └─────────────────────┘
+    
+    [Nodes: 20] [Edges: 35] [Density: 0.184] [Avg Degree: 3.5]
+
+HOW TO USE:
+  1. Pick number of nodes (10-100)
+  2. Pick topology type
+  3. Click CREATE NETWORK
+  4. See the graph appear
+  5. Note the statistics at bottom
+  6. Use [🔄 RESET] when done to start over
+
+WHAT YOU'LL LEARN:
+  - What network structure looks like
+  - How many connections exist
+  - How "connected" the network is
+  - Different network topologies
+
+================================================================================
+
+TAB 2: CONTROL
+==============
+
+WHAT: Select and run algorithms on your network
+
+    [⚙️ CONTROL PANEL]
+    ┌────────────────────────┐
+    │ [✅ Network Status]    │
+    │                        │
+    │ SELECT ALGORITHM:      │
+    │ [v Choose Algorithm]   │
+    │  ✓ BFS                 │
+    │    DFS                 │
+    │    Dijkstra            │
+    │    Greedy              │
+    │    Knapsack            │
+    │    TSP                 │
+    │    BranchAndBound      │
+    │                        │
+    │ [PARAMETERS]           │
+    │ Start Node: [v node_0] │
+    │ (or other params)      │
+    │                        │
+    │ [⚙️ RUN ALGORITHM]     │
+    └────────────────────────┘
+              │
+              ↓
+    ⏳ Running Dijkstra...
+              │
+              ↓
+    ✅ Dijkstra completed
+
+HOW TO USE:
+  1. Make sure network exists (go to Network tab if not)
+  2. Pick algorithm from dropdown
+  3. Algorithm-specific options appear
+  4. Set parameters (which node to start, budget, etc)
+  5. Click RUN ALGORITHM
+  6. Wait for completion message
+
+WHAT YOU'LL LEARN:
+  - How to run different algorithms
+  - What parameters each needs
+  - How fast each executes
+  - Different results from different algorithms
+
+================================================================================
+
+TAB 3: ANIMATION
+================
+
+WHAT: Watch algorithm run step by step
+
+    ┌──────────────────────────┐
+    │   NETWORK GRAPH          │
+    │  (Colored nodes update)  │
+    │     🟢 ─── 🟡         │
+    │     │╲     ╱│         │
+    │     │ 🔴 🟢 │         │
+    │     │   ╲│   │         │
+    │     🟢─── 🟢         │
+    │                        │
+    │ Green=Unvisited        │
+    │ Yellow=Current         │
+    │ Red=Visited            │
+    └──────────────────────────┘
+    
+    STEP CONTROLS:
+    [⏮️ First] [Slider: ●───────] [⏭️ Last]
+    
+    Step 5 of 20
+    [Current: node_2] [Visited: 5] [Frontier: 8] [Cost: 12.5]
+    
+    ANIMATION CONTROLS:
+    Speed: 0.5 [====●=====] 2.0
+    [▶️ Play] [⏸️ Stop]
+
+HOW TO USE:
+  1. Run algorithm first (go to Control tab)
+  2. Watch graph colors change as algorithm progresses
+  3. Click PLAY to auto-animate (colors change automatically)
+  4. Use slider to jump to any step
+  5. Watch metrics update at bottom showing algorithm state
+  6. Adjust speed slider if too fast/slow
+
+WHAT YOU'LL LEARN:
+  - Exactly how algorithm works step by step
+  - Which nodes get visited in which order
+  - How the "frontier" (waiting nodes) changes
+  - Visual understanding of algorithm behavior
+
+================================================================================
+
+TAB 4: THREATS
+==============
+
+WHAT: Simulate and track cyber threats
+
+    ┌─────────────────────────┐    ┌─────────────────┐
+    │ GENERATE THREAT         │    │ THREAT STATS    │
+    │                         │    │                 │
+    │ Type: [v Malware]       │    │ Active: 3       │
+    │ Origin: [v node_3]      │    │ Compromised: 7  │
+    │ Severity: ●──────  0.8  │    └─────────────────┘
+    │                         │
+    │ [Generate Threat]       │
+    └─────────────────────────┘
+                │
+                ↓
+         ✅ Threat generated
+                │
+                ↓
+    ┌──────────────────────────────┐
+    │ ID        Type    Severity   │
+    │ threat_001 Malware 0.80      │
+    │ threat_002 DDoS    0.60      │
+    │ threat_003 Intrus. 0.90      │
+    └──────────────────────────────┘
+
+HOW TO USE:
+  1. Network must exist first
+  2. Pick threat type (DDoS, Intrusion, Malware)
+  3. Pick where threat starts (origin node)
+  4. Set severity (0.0=mild, 1.0=critical)
+  5. Click GENERATE THREAT
+  6. Watch table populate with threat details
+  7. See how many nodes are affected
+
+WHAT YOU'LL LEARN:
+  - How threats are modeled
+  - Which systems get compromised
+  - Threat severity and spread
+  - Real-world threat tracking
+
+================================================================================
+
+TAB 5: ANALYTICS
+================
+
+WHAT: View performance metrics and charts
+
+    ┌──────────────────────────────────┐
+    │ METRICS                          │
+    │ Total Steps: 25    Final Cost: 87.5  Visited: 18 │
+    └──────────────────────────────────┘
+    
+    ┌─────────────────────┐  ┌─────────────────────┐
+    │ COST PROGRESSION    │  │ VISITED PROGRESSION │
+    │                     │  │                     │
+    │ Cost│               │  │ Count│              │
+    │  100│    ╱╱╱╱       │  │   20│              │
+    │   75│   ╱╱          │  │   15│    ╱╱╱╱      │
+    │   50│  ╱╱           │  │   10│   ╱╱         │
+    │   25│ ╱             │  │    5│  ╱           │
+    │    0├─────────Step  │  │    0├──────────Step│
+    │     └──────────→    │  │     └──────────→   │
+    └─────────────────────┘  └─────────────────────┘
+
+HOW TO USE:
+  1. Run an algorithm first (go to Control tab)
+  2. Come back to Analytics tab
+  3. See total metrics at top
+  4. Study left chart: How does cost change over time?
+  5. Study right chart: How many nodes discovered per step?
+  6. Think about what shape tells you about algorithm
+
+WHAT YOU'LL LEARN:
+  - Algorithm performance over time
+  - When algorithm is slow/fast
+  - How quickly solution improves
+  - Algorithm efficiency analysis
+
+================================================================================
+COMPLETE WORKFLOW IN ONE IMAGE
+================================================================================
+
+                    ┌─────────────────────┐
+                    │    LAPTOP/BROWSER   │
+                    │  http://localhost   │
+                    │      :8502          │
+                    └─────────────────────┘
+                              │
+                              ↓
+                 ┌────────────────────────┐
+                 │   NETWORK TAB          │
+                 │  Create 20-node graph  │
+                 │  Topology: random      │
+                 │  [Create Network]      │
+                 └────────────────────────┘
+                              │
+                              ↓
+                 ┌────────────────────────┐
+                 │   CONTROL TAB          │
+                 │  Pick: BFS             │
+                 │  Start: node_0         │
+                 │  [Run Algorithm]       │
+                 └────────────────────────┘
+                              │
+                              ↓
+                 ┌────────────────────────┐
+                 │   ANIMATION TAB        │
+                 │  Watch colors change   │
+                 │  Step 5 of 20          │
+                 │  [Play]                │
+                 └────────────────────────┘
+                              │
+                              ↓
+                 ┌────────────────────────┐
+                 │   ANALYTICS TAB        │
+                 │  View charts:          │
+                 │  - Cost over time      │
+                 │  - Nodes discovered    │
+                 └────────────────────────┘
+                              │
+                              ↓
+                 ┌────────────────────────┐
+                 │   THREATS TAB          │
+                 │  Simulate attacks:     │
+                 │  - DDoS from node_2    │
+                 │  - Malware from node_7 │
+                 └────────────────────────┘
+                              │
+                              ↓
+                   ✨ FULL EXPERIENCE ✨
+
+================================================================================
+QUICK PARAMETER GUIDE
+================================================================================
+
+BFS/DFS PARAMETERS:
+  Start Node: Which computer to begin from?
+             Example: node_0 (main server)
+
+DIJKSTRA PARAMETERS:
+  Start Node: Where to begin?
+  End Node:   Where to reach?
+  Example: Find path from node_0 to node_15
+
+GREEDY/KNAPSACK/BRANCH&BOUND PARAMETERS:
+  Budget/Capacity: How much to spend?
+  Example: 3000 (dollars for security patches)
+
+TSP PARAMETERS:
+  Start Node: Which city to start tour from?
+  Example: node_0
+  (Automatically visits all others and returns)
+
+================================================================================
+ALGORITHM SPEED COMPARISON
+================================================================================
+
+Algorithm           Time to Complete    Steps Needed
+───────────────────────────────────────────────────
+Greedy              ⚡⚡⚡⚡⚡⚡⚡    (8-12 steps)
+TSP                 ⚡⚡⚡⚡ (15-20 steps)
+BFS                 ⚡⚡⚡⚡ (15-20 steps)
+DFS                 ⚡⚡⚡⚡ (15-20 steps)
+Dijkstra            ⚡⚡⚡ (20-25 steps)
+Branch & Bound      ⚡⚡ (40-80 steps)
+Knapsack            ⚡⚡ (50-100 steps)
+
+Legend: ⚡⚡⚡⚡⚡⚡⚡ = Very Fast (< 1 second)
+        ⚡⚡⚡⚡⚡ = Fast (1-2 seconds)
+        ⚡⚡⚡ = Medium (2-5 seconds)
+        ⚡⚡ = Slow (5-10 seconds)
+
+================================================================================
+COLOR MEANINGS IN ANIMATION
+================================================================================
+
+🟢 GREEN
+   Meaning: Normal node, not visited yet
+   Action: Will be visited next
+
+🟡 YELLOW
+   Meaning: Currently being processed
+   Action: Algorithm is looking at this node right now
+   Duration: 1 step
+
+🔴 RED
+   Meaning: Already visited
+   Action: Won't be visited again (algorithm done with it)
+
+WHAT THE COLORS TELL YOU:
+  Green nodes = "Still to explore"
+  Yellow node = "Looking at this now"
+  Red nodes  = "Already explored"
+
+================================================================================
+METRICS EXPLAINED
+================================================================================
+
+CURRENT NODE
+  What: Which computer is algorithm processing right now?
+  Example: "node_2"
+  Why: Shows where algorithm is in execution
+
+VISITED NODES
+  What: How many computers have been explored?
+  Example: "5"
+  Why: Shows progress toward exploring whole network
+
+FRONTIER NODES
+  What: How many computers are waiting to be explored?
+  Example: "8"
+  Why: Shows how many options algorithm has
+
+COST
+  What: Total accumulated cost/distance so far
+  Example: "45.5"
+  Why: Shows efficiency of path taken
+
+TOTAL STEPS
+  What: How many decisions did algorithm make?
+  Example: "20"
+  Why: Indicator of algorithm complexity
+
+================================================================================
+REAL-WORLD PARALLELS
+================================================================================
+
+ALGORITHM          REAL-WORLD USE              COMPANY/SYSTEM
+───────────────────────────────────────────────────────────
+BFS                Finding all reachable nodes  Networks, Social media
+DFS                Detecting cycles            Circuit design
+Dijkstra           GPS navigation              Google Maps
+Greedy             Emergency triage            Hospital ERs
+Knapsack           Portfolio optimization      Investment firms
+TSP                Delivery routing            Amazon logistics
+Branch & Bound     Supply chain               Global corporations
+
+================================================================================
+KEY CONCEPTS TO REMEMBER
+================================================================================
+
+1. GRAPH
+   What: Network of connected nodes (computers)
+   Visual: Dots (nodes) with lines (edges/connections)
+   
+2. NODE
+   What: One computer in the network
+   Visual: Green dot (unvisited), yellow (current), red (visited)
+
+3. EDGE
+   What: Connection between two computers
+   Visual: Line connecting two dots
+
+4. ALGORITHM
+   What: Step-by-step procedure to solve a problem
+   Example: "Visit all nodes level by level" (BFS)
+
+5. OPTIMAL
+   What: Best possible solution
+   Example: "Shortest path is optimal"
+
+6. HEURISTIC
+   What: "Good enough" solution that's fast
+   Example: "Pick closest node next" (nearest neighbor)
+
+7. COMPLEXITY
+   What: How time/space grows with input size
+   Example: O(V+E) means doubles when network size doubles
+
+================================================================================
+PRINTABLE QUICK REFERENCE FOR STUDENTS
+================================================================================
+
+REMEMBER THESE 3 STEPS:
+
+1️⃣ NETWORK TAB
+   Create your network
+   Size: 20 nodes
+   Click: Create Network
+
+2️⃣ CONTROL TAB
+   Pick algorithm
+   Set parameters
+   Click: Run Algorithm
+
+3️⃣ ANIMATION TAB
+   Watch step by step
+   See colors change
+   Understand algorithm
+
+DONE! ✅
+
+================================================================================
+END OF VISUAL QUICK REFERENCE
+================================================================================

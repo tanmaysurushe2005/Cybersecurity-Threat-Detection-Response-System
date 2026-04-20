@@ -1,0 +1,620 @@
+================================================================================
+THREATS TAB AND ANALYTICS TAB - COMPLETE USER GUIDE
+================================================================================
+
+This guide explains how to use the Threats and Analytics tabs, and how to 
+demonstrate them to your teacher or in a classroom setting.
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+
+1. THREATS TAB - Complete Guide
+   - What it does
+   - How to use it
+   - Step-by-step demonstration
+   - Teacher explanation
+
+2. ANALYTICS TAB - Complete Guide
+   - What it does
+   - How to use it
+   - Step-by-step demonstration
+   - Teacher explanation
+
+3. Combined Workflow - Full Demonstration
+
+================================================================================
+PART 1: THREATS TAB - COMPLETE GUIDE
+================================================================================
+
+WHAT IT DOES:
+─────────────
+The Threats Tab simulates cybersecurity threats on your network. It allows you to:
+  • Generate different types of threats (DDoS, Intrusion, Malware)
+  • Choose which node the threat originates from
+  • Set threat severity (0.0 = low, 1.0 = critical)
+  • Monitor active threats in real-time
+  • Track which nodes are compromised
+  • Display threat statistics
+
+This demonstrates how algorithms can be used to track and respond to security 
+threats in a network.
+
+
+HOW TO USE IT - STEP BY STEP:
+──────────────────────────────
+
+STEP 1: CREATE A NETWORK (Network Tab)
+   • Go to Network Tab
+   • Enter number of nodes (e.g., 15)
+   • Click "Create Random Network"
+   • Your network appears with green nodes
+   → Purpose: You need a network before threats can be applied
+
+STEP 2: OPEN THE THREATS TAB
+   • Click the "Threats" tab in the navigation
+   • You'll see two sections: "Generate Threat" and "Threat Statistics"
+
+STEP 3: GENERATE A THREAT
+   Left side of screen:
+   
+   3.1 Choose Threat Type
+       • Click dropdown: "Threat Type"
+       • Select one of:
+         - DDoS (Distributed Denial of Service)
+         - Intrusion (Unauthorized access)
+         - Malware (Malicious software)
+   
+   3.2 Select Origin Node
+       • Click dropdown: "Origin Node"
+       • Choose any node from your network
+       → This is where the threat starts
+   
+   3.3 Set Severity Level
+       • Use the slider: "Severity" (0.0 to 1.0)
+       • Values:
+         - 0.0-0.3: Low severity
+         - 0.4-0.6: Medium severity
+         - 0.7-1.0: Critical severity
+       → Higher severity = more dangerous threat
+   
+   3.4 Generate the Threat
+       • Click button: "Generate Threat"
+       • Green success message appears: "Threat generated: [threat_id]"
+       → The threat is now active on your network
+
+STEP 4: MONITOR THREAT STATISTICS
+   Right side of screen shows live metrics:
+   
+   • Active Threats: Count of all threats currently active
+   • Compromised Nodes: Count of nodes affected by threats
+   
+   These numbers update as you generate more threats.
+
+STEP 5: VIEW THREAT DETAILS TABLE
+   Bottom of screen shows table with columns:
+   
+   | ID           | Type      | Severity | Status    | Affected |
+   |──────────────|───────────|──────────|───────────|────────--|
+   | THREAT_001   | DDoS      | 0.85    | Active    | 4        |
+   | THREAT_002   | Intrusion | 0.50    | Active    | 2        |
+   
+   Each row = one active threat
+   • ID: Unique identifier for the threat
+   • Type: DDoS / Intrusion / Malware
+   • Severity: Numeric severity level
+   • Status: Active or resolved
+   • Affected: Number of compromised nodes
+
+
+QUICK DEMONSTRATION EXAMPLE:
+────────────────────────────
+
+Here's how to demonstrate Threats tab in 2 minutes:
+
+1. Create a 20-node network
+2. Go to Threats tab
+3. Generate 3 threats in sequence:
+   
+   THREAT 1: DDoS from Node-5, Severity 0.8
+   → Active Threats: 1, Compromised Nodes: ~3-5
+   
+   THREAT 2: Intrusion from Node-12, Severity 0.6
+   → Active Threats: 2, Compromised Nodes: ~5-8
+   
+   THREAT 3: Malware from Node-8, Severity 0.9
+   → Active Threats: 3, Compromised Nodes: ~8-12
+
+4. Show the threat table with all 3 threats listed
+5. Explain how each threat affects different parts of network
+
+================================================================================
+HOW TO EXPLAIN THREATS TAB TO YOUR TEACHER:
+================================================================================
+
+TEACHER EXPLANATION - 3 MINUTE TALK:
+────────────────────────────────────
+
+"Professor/Teacher, here's what the Threats Tab demonstrates:
+
+[PART 1: WHAT IT SHOWS]
+This tab simulates real-world cybersecurity threats. When a threat occurs in 
+a network, it can spread to connected nodes. The tab lets us:
+  1. Simulate different threat types (DDoS, Intrusion, Malware)
+  2. Track how many nodes get compromised
+  3. Monitor threat severity levels
+  4. Visualize the impact of threats on the network
+
+[PART 2: ALGORITHM RELEVANCE]
+This connects to Data Structures and Algorithms because:
+  • Graph Traversal (BFS/DFS): Used to find all compromised nodes
+  • Dijkstra's Algorithm: Find fastest path threats spread through network
+  • Greedy Algorithms: Decide which nodes to protect first (most critical)
+  • Optimization: Figure out minimal nodes to isolate to stop threats
+
+[PART 3: REAL-WORLD APPLICATION]
+In actual networks, when a malware infects one computer, it spreads to 
+connected computers. By understanding graph algorithms, we can:
+  • Quickly identify all affected nodes
+  • Find the optimal nodes to isolate/patch
+  • Trace back to the threat origin using path-finding algorithms
+
+[PART 4: DEMO]
+Let me show you: I'll create threats and you'll see the metrics update in 
+real-time, showing how the threat spreads through the network."
+
+
+TALKING POINTS FOR THREAT TAB:
+──────────────────────────────
+
+If teacher asks questions, use these responses:
+
+Q: "How does severity affect the network?"
+A: "Higher severity threats spread faster and compromise more nodes. It 
+   simulates more aggressive attacks. Lower severity might only affect 
+   the immediate neighbors of the origin node."
+
+Q: "Why are there different threat types?"
+A: "Different threats have different characteristics:
+   • DDoS: Floods the network, affects nearby nodes heavily
+   • Intrusion: Stealthy, spreads through connected systems
+   • Malware: Self-replicating, affects multiple branches"
+
+Q: "How would you stop these threats?"
+A: "Using algorithms! We can:
+   1. Run BFS from compromised nodes to find all affected systems
+   2. Use Dijkstra to find the critical node to isolate (bottleneck)
+   3. Use Greedy to prioritize which nodes to protect first"
+
+Q: "Is this realistic?"
+A: "Yes! Real networks use similar concepts. Security teams:
+   1. Detect threat origin
+   2. Trace spread using graph algorithms
+   3. Decide which nodes to isolate (using optimization algorithms)"
+
+================================================================================
+PART 2: ANALYTICS TAB - COMPLETE GUIDE
+================================================================================
+
+WHAT IT DOES:
+─────────────
+The Analytics Tab shows performance metrics and visualizations of how an 
+algorithm executed. It tracks and displays:
+  • Total steps the algorithm took
+  • Final cost (for cost-based algorithms like Dijkstra)
+  • Total nodes visited
+  • Cost progression over time (line graph)
+  • Visited nodes progression over time (line graph)
+
+This demonstrates algorithm efficiency and behavior during execution.
+
+
+HOW TO USE IT - STEP BY STEP:
+──────────────────────────────
+
+STEP 1: RUN AN ALGORITHM (Required first!)
+   • Go to Network Tab → Create network (e.g., 15 nodes)
+   • Go to Control Tab
+   • Select an algorithm (BFS, DFS, Dijkstra, etc.)
+   • Set parameters (start node, etc.)
+   • Click "Run Algorithm"
+   • Wait for "✅ Algorithm completed" message
+
+STEP 2: OPEN THE ANALYTICS TAB
+   • Click the "Analytics" tab in the navigation
+   • Analytics data appears automatically
+   → It pulls data from the algorithm you just ran
+
+STEP 3: READ THE SUMMARY METRICS (Top row)
+   Three boxes display key numbers:
+   
+   📊 Box 1: "Total Steps"
+      • Shows how many steps the algorithm took
+      • Example: "45 steps"
+      • Lower = more efficient algorithm
+      → Important for comparing algorithms
+   
+   📊 Box 2: "Final Cost"
+      • Shows the cumulative cost from start to finish
+      • Example: "125.34"
+      • Only for cost-based algorithms (Dijkstra, Greedy)
+      • N/A for algorithms without costs
+      → Shows optimality of path found
+   
+   📊 Box 3: "Nodes Visited"
+      • Total number of nodes explored
+      • Example: "14 nodes"
+      • Lower = more targeted search
+      → Shows how thorough the search was
+
+STEP 4: ANALYZE THE COST PROGRESSION CHART (Left graph)
+   X-axis: Step number (0 → total steps)
+   Y-axis: Cost value (increases as algorithm progresses)
+   
+   What it shows:
+   • How cost accumulates at each step
+   • Sharp increases = expensive transitions between nodes
+   • Flat sections = nodes with low cost transitions
+   • Final value = total path cost
+   
+   Algorithm comparison:
+   • Dijkstra: Smooth, steady progression (optimal path)
+   • DFS: Erratic, may spike when backtracking
+   • Greedy: Steeper rises (picks expensive greedy moves)
+
+STEP 5: ANALYZE THE VISITED NODES CHART (Right graph)
+   X-axis: Step number (0 → total steps)
+   Y-axis: Number of visited nodes (increases over time)
+   
+   What it shows:
+   • How many nodes discovered at each step
+   • Steep slope = algorithm finding nodes quickly
+   • Flat sections = algorithm stuck exploring local area
+   • Final plateau = algorithm converged
+   
+   Algorithm comparison:
+   • BFS: Linear growth (explores layer by layer)
+   • DFS: Exponential growth (explores deep branches)
+   • Dijkstra: Controlled growth (explores minimum cost nodes)
+
+
+QUICK DEMONSTRATION EXAMPLE:
+────────────────────────────
+
+Here's how to demonstrate Analytics in 2 minutes:
+
+SCENARIO 1: Run BFS Algorithm
+   1. Network Tab: Create 15-node network
+   2. Control Tab: Select BFS, start node = Node-1, click Run
+   3. Wait for completion message
+   4. Analytics Tab: Shows metrics
+   
+   What you'll see:
+   • Total Steps: ~20-30 (depends on network)
+   • Nodes Visited: ~12-14 (most nodes)
+   • Cost chart: Steady linear progression
+   • Visited chart: Linear growth pattern
+   
+   Explanation: "BFS explores systematically, visiting nodes layer by layer"
+
+SCENARIO 2: Run Dijkstra Algorithm
+   1. Same network
+   2. Control Tab: Select Dijkstra, start node = Node-1, click Run
+   3. Wait for completion
+   4. Analytics Tab: Compare with BFS
+   
+   What you'll see:
+   • Total Steps: Might be LESS than BFS
+   • Final Cost: Shows actual path cost
+   • Cost chart: Smooth progression (optimal path)
+   • Visited chart: Controlled growth
+   
+   Explanation: "Dijkstra finds the shortest cost path, so it visits fewer 
+   unnecessary nodes than BFS. See how Final Cost shows the optimal distance!"
+
+
+COMPARING TWO ALGORITHMS SIDE-BY-SIDE:
+───────────────────────────────────────
+
+To compare algorithms in class:
+
+1. RUN ALGORITHM 1 (e.g., DFS)
+   • Create network
+   • Run DFS
+   • Take screenshot of Analytics tab
+   
+2. RUN ALGORITHM 2 (e.g., Dijkstra)
+   • Same network or new one
+   • Run Dijkstra
+   • Take screenshot of Analytics tab
+   
+3. COMPARE THE METRICS:
+   
+   Compare | DFS      | Dijkstra
+   --------|----------|----------
+   Steps   | 45       | 32
+   Cost    | N/A      | 185.5
+   Visited | 13       | 11
+   
+   Explanation: "Dijkstra finds better paths with fewer steps because it 
+   prioritizes nodes by cost, while DFS just goes deep randomly."
+
+================================================================================
+HOW TO EXPLAIN ANALYTICS TAB TO YOUR TEACHER:
+================================================================================
+
+TEACHER EXPLANATION - 4 MINUTE TALK:
+────────────────────────────────────
+
+"Professor/Teacher, the Analytics Tab demonstrates algorithm performance 
+analysis. Here's what it shows:
+
+[PART 1: WHAT IT MEASURES]
+When we run an algorithm, we track three main metrics:
+  1. Steps Taken: How many iterations the algorithm needed
+  2. Final Cost: The total cost of the path (for optimized algorithms)
+  3. Nodes Visited: How many nodes were explored
+
+These metrics help us understand algorithm efficiency.
+
+[PART 2: THE GRAPHS]
+There are two key visualizations:
+
+  COST PROGRESSION: Shows how the total path cost grows
+  → Steep curve = expensive path being taken
+  → Smooth curve = optimal path selection
+  → Plateaus = local optimization completed
+
+  VISITED NODES: Shows discovery process
+  → Linear growth = systematic exploration (like BFS)
+  → Exponential growth = deep search (like DFS)
+  → Slow growth = efficient search (like Dijkstra)
+
+[PART 3: WHY IT MATTERS]
+In real applications:
+  • Network routing: We want minimum cost paths (low Final Cost)
+  • Database searching: We want fast discovery (low Steps)
+  • Resource allocation: We want to explore efficiently (visit fewer nodes)
+
+This tab lets us see if our algorithm achieves these goals.
+
+[PART 4: COMPARISON]
+By running different algorithms and comparing analytics, we can:
+  • Prove which algorithm is more efficient
+  • Show time complexity in practice
+  • Demonstrate algorithm correctness
+  • Optimize algorithm parameters
+
+[PART 5: DEMO]
+Let me run BFS and Dijkstra on the same network and show you the 
+difference in their metrics. You'll see how Dijkstra uses cost information 
+to find better paths faster!"
+
+
+TALKING POINTS FOR ANALYTICS TAB:
+─────────────────────────────────
+
+If teacher asks questions, use these responses:
+
+Q: "Why are the steps different for BFS vs DFS on same network?"
+A: "BFS explores systematically level-by-level, while DFS goes deep into 
+   one branch. On some networks, DFS might finish faster by luck, on others 
+   BFS might be faster. The Analytics tab shows this actual behavior."
+
+Q: "Why does Dijkstra have low steps compared to others?"
+A: "Dijkstra uses the cost information to prioritize which nodes to explore. 
+   It doesn't waste time on expensive paths. Other algorithms don't have 
+   this intelligence, so they explore more randomly."
+
+Q: "What does the plateau in visited nodes mean?"
+A: "It means the algorithm has explored all reachable nodes and isn't 
+   discovering new ones anymore. The algorithm has converged to its final 
+   result. No new steps reveal new nodes."
+
+Q: "How would you use this data in practice?"
+A: "In real networks:
+   1. Run algorithms and collect analytics
+   2. Compare metrics across algorithms
+   3. Choose the algorithm with best performance
+   4. Use it in production to route traffic/packets
+   5. Monitor analytics to detect network issues"
+
+Q: "What if two algorithms have same steps but different costs?"
+A: "That means they explored the same number of nodes but took different 
+   paths. One found a cheaper route! This is why Dijkstra is 'optimal' - 
+   it minimizes cost even when step count is similar."
+
+================================================================================
+PART 3: COMBINED WORKFLOW - FULL DEMONSTRATION
+================================================================================
+
+Here's how to demonstrate BOTH tabs together in a compelling 5-minute demo:
+
+FULL 5-MINUTE DEMONSTRATION SCRIPT:
+──────────────────────────────────
+
+[MINUTE 1: SETUP]
+"Okay, let me demonstrate how we use the Threats and Analytics tabs to 
+understand cybersecurity and algorithms together.
+
+First, I'll create a network that represents our company's computer systems. 
+Some are servers (important), some are workstations (less important), and 
+some are peripherals (least important)."
+
+Action: Go to Network Tab, create 20-node network
+
+[MINUTE 2: RUN ALGORITHM]
+"Now, I'll run a pathfinding algorithm on this network. Let's use BFS - 
+it explores systematically, which is like a security scan checking every 
+connected computer."
+
+Action: Go to Control Tab, run BFS from a node
+
+"While it runs, note that it's tracking every step. When done, we'll have 
+complete data about how the search unfolded."
+
+[MINUTE 3: ANALYZE PERFORMANCE]
+"Let's look at the Analytics. The algorithm took 32 steps and visited 18 
+nodes. The cost progression graph shows it visited nodes in a structured way.
+
+This is important because in security: more efficient = faster threat 
+response. If we can scan all nodes in 32 steps, we can identify threats 
+quickly."
+
+Action: Show Analytics tab, point out metrics
+
+[MINUTE 4: SIMULATE THREAT]
+"Now let's see what happens in a real threat scenario. I'll go to the 
+Threats tab and simulate an intrusion from one of these nodes."
+
+Action: Go to Threats tab, generate a threat with high severity
+
+"Look - the threat originates at Node-7 with 0.9 severity. It's spreading 
+to nearby nodes. We can see 6 nodes are now compromised.
+
+But here's the key: Using the algorithm we just ran, we know the network 
+topology. We can run BFS or Dijkstra to find:
+  1. All compromised nodes (by traversing from threat origin)
+  2. The best way to isolate the threat (using pathfinding)
+  3. Critical nodes to protect (using graph centrality algorithms)"
+
+[MINUTE 5: CONCLUSION]
+"This is why algorithms matter in cybersecurity. We don't just handle threats 
+randomly. We use algorithms like BFS, DFS, and Dijkstra to:
+  1. Understand network topology quickly (Analytics shows speed)
+  2. Track threat spread systematically
+  3. Make optimal decisions about which systems to protect
+  4. Respond faster than manual processes
+
+The Analytics tab proves our algorithms work efficiently. The Threats tab 
+shows realistic scenarios where these algorithms are applied. Together, they 
+demonstrate that Data Structures & Algorithms aren't just theory - they're 
+essential for real cybersecurity systems."
+
+================================================================================
+HELPFUL TIPS AND TRICKS:
+================================================================================
+
+TIP 1: ALGORITHM SELECTION FOR DIFFERENT TASKS
+────────────────────────────────────────────────
+
+Task: Find all connected nodes
+→ Best Algorithm: BFS
+→ Why: Explores systematically, visits all
+→ Analytics: Linear visited growth
+
+Task: Find shortest cost path
+→ Best Algorithm: Dijkstra
+→ Why: Minimizes cost automatically
+→ Analytics: Lower final cost than others
+
+Task: Explore deeply for backup paths
+→ Best Algorithm: DFS
+→ Why: Explores all branches thoroughly
+→ Analytics: Erratic visited graph (backtracking)
+
+Task: Greedy threat response
+→ Best Algorithm: Greedy
+→ Why: Makes quick decisions, sacrifices optimality
+→ Analytics: Fast steps, but higher cost
+
+TIP 2: EXPLAINING TO NON-TECHNICAL TEACHER
+──────────────────────────────────────────
+
+Use simple analogies:
+
+Threats Tab → "Like a virus spreading through a town - starts at one place, 
+spreads to nearby people"
+
+Analytics Tab → "Like tracking an ambulance's efficiency - steps are number 
+of stops, visited nodes are people helped, cost is fuel/resources used"
+
+BFS → "Checking neighbors first, then neighbors of neighbors (systematic)"
+
+Dijkstra → "Taking the cheapest route, not the first available one"
+
+TIP 3: COMMON MISTAKES TO AVOID
+────────────────────────────────
+
+❌ MISTAKE 1: Running Analytics before running an algorithm
+✅ FIX: Always create network and run algorithm FIRST
+
+❌ MISTAKE 2: Not explaining what metrics mean
+✅ FIX: Always say "This number shows [what it represents]"
+
+❌ MISTAKE 3: Comparing algorithms on different networks
+✅ FIX: Create network once, then run different algorithms on same network
+
+❌ MISTAKE 4: Ignoring the graphs
+✅ FIX: Always analyze the shape and trend of the graphs
+
+❌ MISTAKE 5: Not connecting to cybersecurity
+✅ FIX: Always explain "This matters in cybersecurity because..."
+
+TIP 4: QUESTIONS TO ASK YOUR TEACHER
+─────────────────────────────────────
+
+"See how BFS visits more nodes than Dijkstra? Can you guess why?"
+→ Shows they're thinking about algorithm differences
+
+"If we had 1000 nodes instead of 20, would the steps increase proportionally?"
+→ Shows they're thinking about scalability (Big O)
+
+"What would happen if we made threats more severe?"
+→ Shows they're thinking about real-world parameters
+
+"Could we use these algorithms for something other than networks?"
+→ Shows they're thinking about generalization
+
+================================================================================
+DEMO CHECKLIST - USE BEFORE PRESENTING TO TEACHER:
+================================================================================
+
+□ Network Tab:
+  □ Test creating network with 15 nodes
+  □ Verify network displays correctly
+  □ Check that all nodes are visible
+
+□ Control Tab:
+  □ Test running BFS
+  □ Test running Dijkstra
+  □ Check algorithm completes successfully
+  □ Verify "completed" message shows
+
+□ Threats Tab:
+  □ Generate 2-3 threats
+  □ Check threat table displays
+  □ Verify metrics update
+  □ Take screenshot if needed
+
+□ Analytics Tab:
+  □ Verify metrics show (Total Steps, Final Cost, Nodes Visited)
+  □ Verify both graphs display
+  □ Check that data is readable
+  □ Take screenshots for comparison
+
+□ Full Workflow:
+  □ Run algorithm → check Analytics
+  □ Generate threats → check Threats
+  □ Verify consistency between tabs
+  □ Practice explanation script
+
+================================================================================
+FINAL NOTES:
+================================================================================
+
+Remember:
+1. THREATS TAB = Shows real-world cybersecurity scenarios
+2. ANALYTICS TAB = Shows algorithm performance metrics
+3. TOGETHER = Demonstrates why algorithms are crucial for security
+
+Your teacher will be impressed by:
+✓ Understanding what each tab does
+✓ Being able to explain the metrics
+✓ Connecting it to real cybersecurity
+✓ Showing how algorithms solve real problems
+✓ Demonstrating with actual data from your app
+
+Good luck with your presentation! 🎯
+
+================================================================================
